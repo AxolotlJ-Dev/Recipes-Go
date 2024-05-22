@@ -3,7 +3,7 @@ import { Card } from "@/components/Cards";
 import { useEffect, useState } from "react";
 
 export function ListCard() {
-    const url: string = "http://localhost:3001/recipes";
+    const url: string = "https://api-recipes-d99v.onrender.com/recipes";
     const [cards, setCards] = useState<Card[]>([]);
 
     useEffect(() => {

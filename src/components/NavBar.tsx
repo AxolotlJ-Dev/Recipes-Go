@@ -1,20 +1,39 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function NavBar() {
+
+  const [auth, setAuth] = useState(false)
+
+  useEffect(() => {
+    const savedItems = localStorage.getItem("items");
+    if (savedItems) {
+      const items = JSON.parse(savedItems);
+      if (items.token) {
+        setAuth(true);
+      } else {
+        setAuth(false);
+      }
+    }
+  }, [])
+
+
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <header className="flex flex-wrap sm:justify-start sm:flex-nowrap w-full text-sm py-4  bg-neutral-800 fixed">
+    <header className="flex flex-wrap sm:justify-start sm:flex-nowrap w-full text-sm py-4  bg-neutral-800 fixed mb-52">
       <nav
         className="max-w-[85rem] w-full mx-auto px-4 sm:flex sm:items-center sm:justify-between"
         aria-label="Global"
       >
         <div className="flex items-center justify-between">
-          <a className="flex-none text-xl font-semibold  text-yellow-300" href="#">
+          <Link
+            className="flex-none text-xl font-semibold  text-yellow-300"
+            href="/"
+          >
             Recipes Go
-          </a>
+          </Link>
           <div className="sm:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
@@ -49,9 +68,8 @@ export default function NavBar() {
         </div>
         <div
           id="navbar-collapse-with-animation"
-          className={`hs-collapse overflow-hidden transition-all duration-300 basis-full grow sm:block ${
-            isOpen ? "" : "hidden"
-          } `}
+          className={`hs-collapse overflow-hidden transition-all duration-300 basis-full grow sm:block ${isOpen ? "" : "hidden"
+            } `}
         >
           <div className="flex flex-col gap-5 mt-5 sm:flex-row sm:items-center sm:justify-end sm:mt-0 sm:ps-5">
             <Link
@@ -61,24 +79,34 @@ export default function NavBar() {
             >
               Landing
             </Link>
-            <a
+            <Link
               className="font-medium text-neutral-400  hover:text-neutral-500"
-              href="#"
+              href="/Home"
             >
-              Account
-            </a>
+              Home
+            </Link>
             <a
               className="font-medium text-neutral-400  hover:text-neutral-500"
               href="#"
             >
               Work
             </a>
-            <Link
-              className="font-medium  text-neutral-400  hover:text-neutral-500"
-              href="/Login"
-            >
-              Login
-            </Link>
+            {
+              auth == true ? <Link
+                className="font-medium  text-neutral-400  hover:text-neutral-500"
+                href="/Profile"
+              >
+                Profile
+              </Link> : <Link
+                className="font-medium  text-neutral-400  hover:text-neutral-500"
+                href="/SingIn"
+              >
+                Sing In
+              </Link>
+            }
+            <button className="font-medium  text-neutral-400  hover:text-neutral-500">
+              En/ES
+            </button>
           </div>
         </div>
       </nav>

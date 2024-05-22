@@ -1,14 +1,20 @@
-
-
 interface Card {
-    ID:          number;
-    title:       string;
-    description: string;
-    image:       string;
+  ID: number;
+  title: string;
+  description: string;
+  image: string;
 }
 
-
 interface FormData {
-    email: string;
-    password: string;
-  };
+  first_name: string;
+  last_Name: string;
+  email: string;
+  password: string;
+}
+
+interface Recipe {
+  id: number;
+  title: string;
+  description: string;
+  imageUrl: string;
+}

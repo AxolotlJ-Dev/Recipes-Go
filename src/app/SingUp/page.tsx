@@ -25,7 +25,7 @@ export default function SingUp() {
       first_name: data.first_name
     };
 
-    fetch("http://localhost:3001/singUp", {
+    fetch("https://api-recipes-d99v.onrender.com/signUp", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -42,7 +42,7 @@ export default function SingUp() {
         console.log(data);
         // setItems(data);
         localStorage.setItem("items", JSON.stringify(data));
-        router.push("/SingIn")
+        router.push("/SignIn")
       })
       .catch((error) => {
         console.error(

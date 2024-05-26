@@ -2,11 +2,11 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Toaster } from "react-hot-toast";
 
-export default function Login() {
+export default function SignIn() {
   const router = useRouter();
 
   useEffect(() => {
@@ -16,7 +16,7 @@ export default function Login() {
       if (items.token) {
         router.push("/Home");
       } else {
-        router.push("/SingIn");
+        router.push("/SignIn");
       }
     }
   }, []);
@@ -37,7 +37,7 @@ export default function Login() {
       password: data.password,
     };
 
-    fetch("http://localhost:3001/singIn", {
+    fetch("https://api-recipes-d99v.onrender.com/signIn", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -51,7 +51,7 @@ export default function Login() {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         // setItems(data);
         localStorage.setItem("items", JSON.stringify(data));
         router.push("/Home")

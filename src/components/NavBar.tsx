@@ -3,9 +3,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function NavBar() {
-
-  const [auth, setAuth] = useState(false)
-
+  const [auth, setAuth] = useState(false);
   useEffect(() => {
     const savedItems = localStorage.getItem("items");
     if (savedItems) {
@@ -16,13 +14,13 @@ export default function NavBar() {
         setAuth(false);
       }
     }
-  }, [])
+  }, [auth]);
 
 
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <header className="flex flex-wrap sm:justify-start sm:flex-nowrap w-full text-sm py-4  bg-neutral-800 fixed mb-52">
+    <header className="flex flex-wrap sm:justify-start sm:flex-nowrap w-full text-sm py-4  bg-neutral-800 fixed mb-52 z-50">
       <nav
         className="max-w-[85rem] w-full mx-auto px-4 sm:flex sm:items-center sm:justify-between"
         aria-label="Global"
@@ -68,11 +66,13 @@ export default function NavBar() {
         </div>
         <div
           id="navbar-collapse-with-animation"
-          className={`hs-collapse overflow-hidden transition-all duration-300 basis-full grow sm:block ${isOpen ? "" : "hidden"
-            } `}
+          className={`hs-collapse overflow-hidden transition-all duration-300 basis-full grow sm:block ${
+            isOpen ? "" : "hidden"
+          } `}
         >
           <div className="flex flex-col gap-5 mt-5 sm:flex-row sm:items-center sm:justify-end sm:mt-0 sm:ps-5">
             <Link
+              onClick={() => setIsOpen(!isOpen)}
               className="font-medium text-yellow-300"
               href="/"
               aria-current="page"
@@ -80,33 +80,32 @@ export default function NavBar() {
               Landing
             </Link>
             <Link
+              onClick={() => setIsOpen(!isOpen)}
               className="font-medium text-neutral-400  hover:text-neutral-500"
               href="/Home"
             >
               Home
             </Link>
-            <a
-              className="font-medium text-neutral-400  hover:text-neutral-500"
-              href="#"
-            >
-              Work
-            </a>
-            {
-              auth == true ? <Link
+            {auth == true ? (
+              <Link
+                onClick={() => setIsOpen(!isOpen)}
                 className="font-medium  text-neutral-400  hover:text-neutral-500"
                 href="/Profile"
               >
                 Profile
-              </Link> : <Link
+              </Link>
+            ) : (
+              <Link
+                onClick={() => setIsOpen(!isOpen)}
                 className="font-medium  text-neutral-400  hover:text-neutral-500"
-                href="/SingIn"
+                href="/SignIn"
               >
                 Sing In
               </Link>
-            }
-            <button className="font-medium  text-neutral-400  hover:text-neutral-500">
-              En/ES
-            </button>
+            )}
+            {/* <button className="font-medium  text-neutral-400  hover:text-neutral-500" >
+              Log Out
+            </button> */}
           </div>
         </div>
       </nav>

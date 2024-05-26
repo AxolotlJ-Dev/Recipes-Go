@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 export default function Recipes({ params }: { params: { slug: string } }) {
   const router = useRouter();
-  const [recipe, setRecipe] = useState(null); // Estado para almacenar la receta
+  const [recipe, setRecipe] = useState<Recipe>(); // Estado para almacenar la receta
   const [loading, setLoading] = useState(true); // Estado para gestionar la carga
 
   useEffect(() => {
@@ -18,12 +18,12 @@ export default function Recipes({ params }: { params: { slug: string } }) {
       }
     }
 
-    fetch(`http://localhost:3001/recipes/${params.slug}`)
+    fetch(`https://api-recipes-d99v.onrender.com/recipes/${params.slug}`)
       .then((response) => response.json())
       .then((data) => {
         setRecipe(data);
         setLoading(false);
-        console.log(data);
+        // console.log(data);
       })
       .catch((error) => {
         console.error("Error fetching recipes:", error);
@@ -47,7 +47,7 @@ export default function Recipes({ params }: { params: { slug: string } }) {
             alt="Imagen de la receta"
             className="w-full rounded-lg object-cover"
             height={600}
-            src={recipe.image || "/placeholder.svg"} // Renderizar imagen de la receta
+            src={ recipe.image == '' ? "/placeholder.svg" : recipe.image} // Renderizar imagen de la receta
             style={{
               aspectRatio: "800/600",
               objectFit: "cover",
@@ -59,22 +59,21 @@ export default function Recipes({ params }: { params: { slug: string } }) {
           <h1 className="text-3xl font-bold">{recipe.title}</h1>
           {/* Nombre de la receta */}
           <div className="space-y-4">
+            <h2 className="text-xl font-semibold">Descripcion</h2>
+            <p className="space-y-2 text-gray-400">
+              {recipe.description}
+            </p>
+          </div>
+          <div className="space-y-4">
             <h2 className="text-xl font-semibold">Ingredientes</h2>
-            {/* <ul className="space-y-2 text-gray-500 dark:text-gray-400">
-              {recipe.ingredients.map((ingredient, index) => (
-                <li key={index}>{ingredient}</li>
-              ))}
-            </ul> */}
+            <p className="space-y-2 text-gray-400">
+              {recipe.ingredients}
+            </p>
           </div>
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">Instrucciones</h2>
-            {/* <ol className="space-y-2 text-gray-500 dark:text-gray-400">
-              {recipe.instructions.map((instruction, index) => (
-                <li key={index}>{instruction}</li>
-              ))}
-            </ol> */}
-            <p className="space-y-2 text-gray-500 dark:text-gray-400">
-              {recipe.description}
+            <p className="space-y-2 text-gray-400">
+              {recipe.instructions}
             </p>
           </div>
         </div>

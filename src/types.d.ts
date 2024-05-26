@@ -13,8 +13,19 @@ interface FormData {
 }
 
 interface Recipe {
-  id: number;
+  ID: number;
   title: string;
   description: string;
-  imageUrl: string;
+  instructions: string;
+  ingredients: string;
+  image: string;
+  user_id: int;
+}
+
+interface Profile {
+  Name: string;
+  lastName: string;
+  token: string;
+  email: string;
+  user: number;
 }

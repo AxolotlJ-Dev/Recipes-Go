@@ -19,12 +19,15 @@ interface Recipe {
   instructions: string;
   ingredients: string;
   image: string;
+  email: string;
+  first_name: string;
+  last_name: string;
   user_id: int;
 }
 
 interface Profile {
-  Name: string;
-  lastName: string;
+  first_name: string;
+  last_name: string;
   token: string;
   email: string;
   user: number;

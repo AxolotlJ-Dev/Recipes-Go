@@ -6,21 +6,26 @@ import { useEffect, useState } from "react";
 
 export default function Home() {
   const [items, setItems] = useState(() => {
-    const savedItems = localStorage.getItem("items");
-    return savedItems ? JSON.parse(savedItems) : [];
+    if (typeof window !== "undefined") {
+      const savedItems = localStorage.getItem("items");
+      return savedItems ? JSON.parse(savedItems) : [];
+    }
+    return [];
   });
-
+  
   useEffect(() => {
-    // Este código se ejecutará solo en el lado del cliente
-    const savedItems = localStorage.getItem("items");
-    if (savedItems) {
-      setItems(JSON.parse(savedItems));
+    if (typeof window !== "undefined") {
+      const savedItems = localStorage.getItem("items");
+      if (savedItems) {
+        setItems(JSON.parse(savedItems));
+      }
     }
   }, []);
-
+  
   useEffect(() => {
-    // Actualiza localStorage cada vez que cambien los items
-    localStorage.setItem("items", JSON.stringify(items));
+    if (typeof window !== "undefined") {
+      localStorage.setItem("items", JSON.stringify(items));
+    }
   }, [items]);
 
   return (

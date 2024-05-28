@@ -8,11 +8,6 @@ interface ModalProps {
   onClose: () => void;
 }
 
-interface SuccessHandlers {
-  reset: () => void;
-  onClose: () => void;
-}
-
 export const UploadPostModal = ({ isOpen, onClose }: ModalProps) => {
   const {
     register,
@@ -21,7 +16,7 @@ export const UploadPostModal = ({ isOpen, onClose }: ModalProps) => {
     formState: { errors },
   } = useForm<Recipe>();
 
-  const [idUser, setIdUser] = useState<number | null>(null);
+  const [user, setUser] = useState<any | null>(null);
   const [imageBase64, setImageBase64] = useState<string | null>(null);
 
   useEffect(() => {
@@ -30,12 +25,7 @@ export const UploadPostModal = ({ isOpen, onClose }: ModalProps) => {
     if (storedItem) {
       try {
         const parsedItem = JSON.parse(storedItem);
-
-        if (parsedItem && parsedItem.user) {
-          setIdUser(parsedItem.user);
-        } else {
-          console.log("No se encontró la propiedad 'user'");
-        }
+        setUser(parsedItem)
       } catch (error) {
         console.error("Error al parsear JSON de localStorage:", error);
       }
@@ -57,34 +47,45 @@ export const UploadPostModal = ({ isOpen, onClose }: ModalProps) => {
     }
   };
 
-  const onSubmit = (data: Recipe) => {
+  const onSubmit = (data: Recipe) => {    
+    reset();
     const data_url = {
+      email: user.email,
+      first_name: user.Name,
+      last_name: user.lastName,
       title: data.title,
       description: data.description,
       ingredients: data.ingredients,
       instructions: data.instructions,
       image: imageBase64,
-      user_id: idUser,
+      user_id: user.user,
     };
 
     // console.log(data_url);
 
-    const Promise: Promise<any> = fetch("https://api-recipes-d99v.onrender.com/recipes", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data_url),
-    });
+    const fetchPromise: Promise<any | null> = fetch(
+      "https://api-recipes-d99v.onrender.com/recipes",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data_url),
+      }
+    ).then(response => response.json()); // Convertir la respuesta a JSON
 
-    toast.promise(Promise, {
-      loading: "Subiendo ...",
-      success: ({ reset, onClose }: SuccessHandlers) => {
-        reset();
-        onClose();
+    toast.promise(fetchPromise, {
+      loading: "Subiendo...",
+      success: () => {
+        // console.log(data);
+        window.location.reload();
+        setTimeout(() => {
+          onClose();
+        }, 5000);
+    
         return "Guardado exitosamente!";
       },
-      error: <b>Could not save.</b>,
+      error: () => "Could not save.",
     });
 
     // .then((response) => {

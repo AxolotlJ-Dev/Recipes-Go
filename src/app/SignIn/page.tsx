@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Toaster } from "react-hot-toast";
 
 export default function SignIn() {
   const router = useRouter();
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     const savedItems = localStorage.getItem("items");
@@ -46,21 +47,18 @@ export default function SignIn() {
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          throw new Error("Credenciales incorrectas");
         }
         return response.json();
       })
       .then((data) => {
-        // console.log(data);
-        // setItems(data);
         localStorage.setItem("items", JSON.stringify(data));
-        router.push("/Home")
+        router.push("/Home");
+        window.location.reload();
       })
       .catch((error) => {
-        console.error(
-          "There has been a problem with your fetch operation:",
-          error
-        );
+        setErrorMessage("Credenciales incorrectas");
+        console.error("Error al iniciar sesión:", error);
       });
   };
 
@@ -70,7 +68,7 @@ export default function SignIn() {
     <div className=" h-screen flex items-center justify-center">
       <div className=" p-8 w-96">
         <h1 className="text-2xl font-bold mb-4 text-yellow-300 text-center">
-          Sing In
+          Sign In
         </h1>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">
@@ -82,9 +80,10 @@ export default function SignIn() {
             </label>
             <input
               type="email"
-              {...register("email",{ required: true })}
+              {...register("email", { required: true })}
               className="border-2 border-gray-200 bg-transparent rounded w-full py-2 px-3 focus:outline-none focus:border-yellow-300"
             />
+            {/* {errors.email && <p className="text-[#ff0000]">Datos Incorrectos</p>} */}
           </div>
           <div className="mb-6">
             <label
@@ -95,9 +94,12 @@ export default function SignIn() {
             </label>
             <input
               type="password"
-              {...register("password",{ required: true })}
+              {...register("password", { required: true })}
               className="border-2 bg-transparent border-gray-200 rounded w-full py-2 px-3 focus:outline-none focus:border-yellow-300"
             />
+            {/* {errors.password && <p className="text-[#ff0000]">Datos Incorrectos</p>} */}
+
+            {errorMessage && <p className="text-red-500">{errorMessage}</p>}
           </div>
           <button
             type="submit"
@@ -107,7 +109,7 @@ export default function SignIn() {
           </button>
 
           <div className="text-center mt-5 block hover:text-yellow-300 font-bold mb-2">
-            <Link href="/SingUp">Sing Up</Link>
+            <Link href="/SingUp">Sign Up</Link>
           </div>
         </form>
       </div>

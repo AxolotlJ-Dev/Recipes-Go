@@ -1,48 +1,35 @@
 "use client";
+import { Loader } from "@/components/Loader";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
-const MyComponent = () => {
+const MyComponent = ({ params }: { params: { slug: string } }) => {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
 
   useEffect(() => {
-    const storedItem = localStorage.getItem("items");
-
-    if (storedItem) {
-      try {
-        const parsedItem: Profile = JSON.parse(storedItem);
-        setProfile(parsedItem);
-        // console.log(parsedItem.user)
-        var user = parsedItem.user;
-
-        if (user) {
-          fetch(`https://api-recipes-d99v.onrender.com/users/${user}`)
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error("Network response was not ok " + response.statusText);
-              }
-              return response.json();
-            })
-            .then((data) => {
-            //   console.log(data.recipes);
-              setRecipes(data.recipes);
-            })
-            .catch((error) => {
-              console.error("There has been a problem with your fetch operation:", error);
-            });
-        } else {
-          console.error("El valor de 'user' no está definido");
-        }
-      } catch (error) {
-        console.error("Error al parsear JSON de localStorage:", error);
-      }
+    if (params.slug) {
+      fetch(`https://api-recipes-d99v.onrender.com/users/${params.slug}`)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok " + response.statusText);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          setProfile(data);
+          // console.log(data);
+          if (data.recipes) {
+            setRecipes(data.recipes);
+          }
+        })
+        .catch((error) => {
+          console.error("There has been a problem with your fetch operation:", error);
+        });
     } else {
-      console.log(
-        "No se encontró ningún item en localStorage con la clave 'items'"
-      );
+      console.error("El valor de 'slug' no está definido");
     }
-  }, []);
+  }, [params.slug]);
 
 
   return (
@@ -67,7 +54,7 @@ const MyComponent = () => {
             </div>
             <div className="pt-16 pb-6 px-6 text-center">
               <h2 className="text-2xl font-bold">
-                {profile.Name + " " + profile.lastName}
+                {profile.first_name + " " + profile.last_name}
               </h2>
               <p className="text-gray-400 mt-1">{profile.email}</p>
             </div>
@@ -141,7 +128,7 @@ const MyComponent = () => {
           </div>
         </div>
       ) : (
-        <p>Cargando...</p>
+        <Loader />
       )}
     </div>
   );

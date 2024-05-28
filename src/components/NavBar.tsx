@@ -1,23 +1,33 @@
 "use client";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function NavBar() {
+  const Router = useRouter();
+
   const [auth, setAuth] = useState(false);
+  const [user, setUser] = useState();
   useEffect(() => {
     const savedItems = localStorage.getItem("items");
     if (savedItems) {
       const items = JSON.parse(savedItems);
+      setUser(items.user);
       if (items.token) {
         setAuth(true);
       } else {
         setAuth(false);
       }
     }
-  }, [auth]);
-
+  }, [user]);
 
   const [isOpen, setIsOpen] = useState(false);
+
+  const handleLogout = () => {
+    localStorage.setItem("items", JSON.stringify({ user: null, token: null }));
+    Router.push("/");
+    window.location.reload();
+  };
 
   return (
     <header className="flex flex-wrap sm:justify-start sm:flex-nowrap w-full text-sm py-4  bg-neutral-800 fixed mb-52 z-50">
@@ -86,21 +96,30 @@ export default function NavBar() {
             >
               Home
             </Link>
+
             {auth == true ? (
-              <Link
-                onClick={() => setIsOpen(!isOpen)}
-                className="font-medium  text-neutral-400  hover:text-neutral-500"
-                href="/Profile"
-              >
-                Profile
-              </Link>
+              <>
+                <Link
+                  onClick={() => setIsOpen(!isOpen)}
+                  className="font-medium  text-neutral-400  hover:text-neutral-500"
+                  href={`/Profile/${user}`}
+                >
+                  Profile
+                </Link>
+                <button
+                  className="font-medium  text-neutral-400  hover:text-neutral-500"
+                  onClick={() => handleLogout()}
+                >
+                  Log Out
+                </button>
+              </>
             ) : (
               <Link
                 onClick={() => setIsOpen(!isOpen)}
                 className="font-medium  text-neutral-400  hover:text-neutral-500"
                 href="/SignIn"
               >
-                Sing In
+                Sign In
               </Link>
             )}
             {/* <button className="font-medium  text-neutral-400  hover:text-neutral-500" >

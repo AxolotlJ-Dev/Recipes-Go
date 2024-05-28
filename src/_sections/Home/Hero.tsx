@@ -24,19 +24,19 @@ export default function Hero() {
         <div className="p-8 sm:hidden md:hidden lg:block lg:w-2/3">
           <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 text-lg md:text-xl lg:text-2xl xl:text-2xl text-center">
             <img
-              className="h-full w-full hidden md:hidden sm:hidden lg:hidden xl:block"
+              className="h-full hidden md:hidden sm:hidden lg:hidden xl:block"
               src="/plato1.jpeg"
               alt="Platillo"
             />
 
             <img
-              className="h-full w-full hidden md:hidden sm:hidden lg:block xl:block"
+              className="h-full hidden md:hidden sm:hidden lg:block xl:block"
               src="/plato2.jpeg"
               alt="Platillo"
             />
 
             <img
-              className="h-full w-full h-full w-full hidden md:hidden sm:hidden lg:block xl:block"
+              className="h-full hidden md:hidden sm:hidden lg:block xl:block"
               src="https://images.pexels.com/photos/1199957/pexels-photo-1199957.jpeg?auto=compress&cs=tinysrgb&w=600"
               alt="Platillo"
             />
